@@ -13,7 +13,7 @@
  */
 #include <float.h>
 
-namespace physics {
+namespace tacoTruck {
 	#ifndef PREC_DOUBLE
 		typedef float real;
 		#define REAL_MAX FLT_MAX;
@@ -23,6 +23,6 @@ namespace physics {
 	#endif
 
 	#define real_pow powf
-}	// End namespace physics
+}	// End namespace tacoTruck
 
 #endif // PRECISION_HPP_

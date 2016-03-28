@@ -12,7 +12,7 @@
  */
 #include "Vector2D.hpp"
 
-namespace physics {
+namespace tacoTruck {
 class Particle {
 protected:
     real inverseMass;
@@ -26,6 +26,8 @@ public:
      *	Integrates the particle forward in time by the given amount.
      *	This function uses a Newton-Euler integration method, which is a linear approximation
      *	to the correct integral. For this reason it may be inaccurate in some cases.
+     *
+     *  @param duration the amount of time (in seconds) to simulate during this integration step
      */
     void integrate(real duration);
 
@@ -53,10 +55,22 @@ public:
     void setAcceleration(const real x, const real y);
     void getAcceleration(Vector2D* acceleration) const;
     Vector2D getAcceleration() const;
-    void addForce(const Vector2D& force);
 
+    /** Returns true if the mass of the particle is NOT infinite. */
+    bool hasFiniteMass() const;
+
+    /**
+     *  Clears the forces applied to the particle. This will be called automatically after each integration step.
+     */
     void clearAccumulator();
-	 };	// Particle
- }	// namespace physics
+
+    /**
+     *  Adds the given force to the particle (to be applied at the next iteration only).
+     *
+     *  @param force a force to be applied to this particle at the next integration step
+     */
+    void addForce(const Vector2D& force);
+};	// Particle
+}	// namespace tacoTruck
 
  #endif	// PHYSICS_PARTICLE_HPP_

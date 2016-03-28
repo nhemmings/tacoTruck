@@ -10,23 +10,19 @@
 #include <cmath>
 #include "particle.hpp"
 
-using namespace physics;
+using namespace tacoTruck;
 
 void Particle::integrate(real duration) {
     // Don't integrate things with infinite mass
     if (inverseMass <= 0.0f) return;
     assert(duration > 0.0f);
 
-    // Update position
+    // Update linear position
     position.addScaledVector(velocity, duration);
 
-    /**
-     *  Calculate acceleration due to forces
-     *
-     *  This is redundant right now, but future iterations will expand on this to calculate an updated acceleration
-     *  based on the accumulated forces.
-     */
+    // Account for acceleration due to forces
     Vector2D resultingAcc = acceleration;
+    resultingAcc.addScaledVector(forceAccum, inverseMass);
 
     // Update velocity
     velocity.addScaledVector(resultingAcc, duration);
@@ -118,6 +114,10 @@ void Particle::getAcceleration(Vector2D* acceleration) const {
 
 Vector2D Particle::getAcceleration() const {
     return acceleration;
+}
+
+bool Particle::hasFiniteMass() const {
+    return inverseMass >= 0.0f;
 }
 
 void Particle::clearAccumulator() {

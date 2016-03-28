@@ -11,7 +11,7 @@
  #include <cmath>
  #include "precision.hpp"
 
- namespace physics {
+ namespace tacoTruck {
 	class Vector2D {
 	public:
 		real x;
@@ -125,6 +125,6 @@
 			return Vector2D(-v.y, v.x);
 		}
 	 };	// Vector2D
- }	// namespace physics
+ }	// namespace tacoTruck
 
  #endif // PHYSICS_VECTOR2D_HPP_

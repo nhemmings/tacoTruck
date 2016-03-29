@@ -15,3 +15,19 @@ void ParticleGravity::updateForce(Particle *particle, real duration) {
     if (!particle->hasFiniteMass()) return;
     particle->addForce(gravity * particle->getMass());
 }
+
+ParticleDrag::ParticleDrag(real k1, real k2) : k1(k1), k2(k2) {}
+
+void ParticleDrag::updateForce(Particle *particle, real duration) {
+    Vector2D force;
+    particle->getVelocity(&force);
+
+    // Calculate the total drag coefficient.
+    real dragCoeff = force.magnitude();
+    dragCoeff = k1 * dragCoeff + k2 * dragCoeff * dragCoeff;
+
+    // Calculate the final force and apply it.
+    force.normalize();
+    force *= -dragCoeff;
+    particle->addForce(force);
+}

@@ -19,7 +19,7 @@ public:
      *  @param duration the amount of time (in seconds) to simulate (for forces affected by time)
      */
      virtual void updateForce(Particle *particle, real duration) = 0;
-     virtual ~ParticleForceGenerator();
+     virtual ~ParticleForceGenerator() {}
 };
 
 /** Holds all the force generators and the particles that they apply to. */
@@ -83,5 +83,21 @@ public:
     /** Applies the drag force to the given particle. */
     virtual void updateForce(Particle *particle, real duration);
 };
+
+/** EXPERIMENTAL */
+class ParticleUplift : public ParticleForceGenerator {
+    /** Holds the uplift force */
+    Vector2D uplift;
+    Vector2D origin;
+    real range;
+
+public:
+    /** Creates the generator with the given force, origin, and effect range */
+    ParticleUplift(const Vector2D &uplift, const Vector2D &origin, real range);
+
+    /** Applies the uplift force to the given particle */
+    virtual void updateForce(Particle *particle, real duration);
+};
+
 }   // namespace tacoTruck
 #endif // PHYSICS_PFGEN_HPP_

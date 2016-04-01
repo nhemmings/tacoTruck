@@ -11,9 +11,6 @@ void ParticleForceRegistry::add(Particle *particle, ParticleForceGenerator *fg) 
     registrations.push_back(newRegistration);
 }
 
-/** Removes the given registered pair from the registry.
- *  If the pair is not registered, this method will have no effect.
- */
 void ParticleForceRegistry::remove(Particle *particle, ParticleForceGenerator *fg) {
     Registry::iterator i = registrations.begin();
     for (; i != registrations.end(); i++) {
@@ -79,3 +76,18 @@ void ParticleUplift::updateForce(Particle *particle, real duration) {
     // Particle is in range; apply uplift force
     particle->addForce(uplift * particle->getMass());
 }
+
+/** ParticleAirbrake ^^^INCOMPLETE^^^ */
+
+ParticleAirbrake::ParticleAirbrake(real drag, bool isActive) : drag(drag), isActive(isActive) {}
+
+/** Applies the airbraking force to the given particle */
+void ParticleAirbrake::updateForce(Particle *particle, real duration) {
+    /** Do nothing if force generator is inactive */
+    if (!isActive) return;
+
+    particle->addForce(particle->getVelocity().invert() * drag);
+}
+
+/** Activates or deactivatess the force generator. */
+void ParticleAirbrake::setActive(bool newActiveState) { isActive = newActiveState; }

@@ -85,11 +85,12 @@ public:
 };
 
 /** EXPERIMENTAL */
+
+/** A force generator that applies an uplift force. One instance can be used for multiple particles. */
 class ParticleUplift : public ParticleForceGenerator {
-    /** Holds the uplift force */
-    Vector2D uplift;
-    Vector2D origin;
-    real range;
+    Vector2D uplift;    /**< Holds the uplift force */
+    Vector2D origin;    /**< Holds the origin of the uplift "chimney" */
+    real range;         /**< The range which the particle must be within from the origin for the force to be applied */
 
 public:
     /** Creates the generator with the given force, origin, and effect range */
@@ -97,6 +98,22 @@ public:
 
     /** Applies the uplift force to the given particle */
     virtual void updateForce(Particle *particle, real duration);
+};
+
+/** A force generator that applies an airbraking force. One instance can be used for multiple particles. */
+class ParticleAirbrake : public ParticleForceGenerator {
+    real drag;      /**< Holds the drag force */
+    bool isActive;  /**< Determines whether or not the force generator is active */
+
+public:
+    /** Creates the generator with the given drag force */
+    ParticleAirbrake(real drag, bool isActive = true);
+
+    /** Applies the airbraking force to the given particle */
+    virtual void updateForce(Particle *particle, real duration);
+
+    /** Activates or deactivatess the force generator. */
+    void setActive(bool isActive);
 };
 
 }   // namespace tacoTruck

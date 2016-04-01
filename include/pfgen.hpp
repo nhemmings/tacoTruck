@@ -101,20 +101,36 @@ public:
 };
 
 /** A force generator that applies an airbraking force. One instance can be used for multiple particles. */
-class ParticleAirbrake : public ParticleForceGenerator {
-    real drag;      /**< Holds the drag force */
+class ParticleAirbrake : public ParticleDrag {
     bool isActive;  /**< Determines whether or not the force generator is active */
 
 public:
     /** Creates the generator with the given drag force */
-    ParticleAirbrake(real drag, bool isActive = true);
+    ParticleAirbrake(real k1, real k2, bool isActive = true);
 
     /** Applies the airbraking force to the given particle */
     virtual void updateForce(Particle *particle, real duration);
 
-    /** Activates or deactivatess the force generator. */
+    /** Activates or deactivates the force generator. */
     void setActive(bool isActive);
+
+    /** Activates or deactivates the force generator. */
+    void toggleActive();
 };
 
+/** A force generator that applies a constant attraction force towards a fixed point.
+ *  One instance can be used for multiple particles.
+ */
+class ParticleAttraction : public ParticleForceGenerator {
+    real magnitude;     /**< Holds the magnitude of the attraction force */
+    Vector2D origin;    /**< Holds the origin of the force */
+
+public:
+    /** Creates the generator with the given force magnitude and origin */
+    ParticleAttraction(real magnitude, const Vector2D &origin);
+
+    /** Applies the directed attraction force to the given particle */
+    virtual void updateForce(Particle *particle, real duration);
+};
 }   // namespace tacoTruck
 #endif // PHYSICS_PFGEN_HPP_

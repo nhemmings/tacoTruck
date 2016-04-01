@@ -77,17 +77,32 @@ void ParticleUplift::updateForce(Particle *particle, real duration) {
     particle->addForce(uplift * particle->getMass());
 }
 
-/** ParticleAirbrake ^^^INCOMPLETE^^^ */
+/** ParticleAirbrake */
 
-ParticleAirbrake::ParticleAirbrake(real drag, bool isActive) : drag(drag), isActive(isActive) {}
+ParticleAirbrake::ParticleAirbrake(real k1, real k2, bool isActive) : ParticleDrag(k1, k2), isActive(isActive) {}
 
-/** Applies the airbraking force to the given particle */
 void ParticleAirbrake::updateForce(Particle *particle, real duration) {
     /** Do nothing if force generator is inactive */
     if (!isActive) return;
 
-    particle->addForce(particle->getVelocity().invert() * drag);
+    ParticleDrag::updateForce(particle, duration);
 }
 
-/** Activates or deactivatess the force generator. */
 void ParticleAirbrake::setActive(bool newActiveState) { isActive = newActiveState; }
+
+void ParticleAirbrake::toggleActive() { isActive = !isActive; }
+
+/** ParticleAttraction */
+
+ParticleAttraction::ParticleAttraction(real magnitude, const Vector2D &origin) : magnitude(magnitude), origin(origin) {}
+
+void ParticleAttraction::updateForce(Particle *particle, real duration) {
+    if (!particle->hasFiniteMass()) return;
+    Vector2D force;
+    particle->getPosition(&force);
+
+    // Calculate direction from particle to force's origin
+    force = origin - force;
+    force.normalize();
+    particle->addForce(force * magnitude * particle->getMass());
+}

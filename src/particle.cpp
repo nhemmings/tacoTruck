@@ -12,6 +12,14 @@
 
 using namespace tacoTruck;
 
+Particle::Particle() : inverseMass(1.0f),
+                       damping(0.999f),
+                       position(0, 0),
+                       velocity(0, 0),
+                       acceleration(0, 0),
+                       forceAccum(0,0)
+{}
+
 void Particle::integrate(real duration) {
     // Don't integrate things with infinite mass
     if (inverseMass <= 0.0f) return;

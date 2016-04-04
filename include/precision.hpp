@@ -16,13 +16,14 @@
 namespace tacoTruck {
 	#ifndef PREC_DOUBLE
 		typedef float real;
-		#define REAL_MAX FLT_MAX;
+		#define REAL_MAX FLT_MAX
 	#else
 		typedef double real;
-		#define REAL_MAX DBL_MAX;
+		#define REAL_MAX DBL_MAX
 	#endif
 
 	#define real_pow powf
+	#define real_abs fabs
 }	// End namespace tacoTruck
 
 #endif // PRECISION_HPP_

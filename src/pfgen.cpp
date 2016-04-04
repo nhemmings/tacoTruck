@@ -2,7 +2,9 @@
 
 using namespace tacoTruck;
 
-/** ParticleForceRegistry */
+/*******************************************************************************************************************//**
+ *  PARTICLE FORCE REGISTRY
+***********************************************************************************************************************/
 
 void ParticleForceRegistry::add(Particle *particle, ParticleForceGenerator *fg) {
     ParticleForceRegistration newRegistration;
@@ -34,8 +36,11 @@ void ParticleForceRegistry::updateForces(real duration) {
     }
 }
 
-/** ParticleGravity */
+/*******************************************************************************************************************//**
+ *  FORCE GENERATORS
+***********************************************************************************************************************/
 
+/** ParticleGravity ***************************************************************************************************/
 ParticleGravity::ParticleGravity(const Vector2D &gravity) : gravity(gravity) {}
 
 void ParticleGravity::updateForce(Particle *particle, real duration) {
@@ -43,8 +48,7 @@ void ParticleGravity::updateForce(Particle *particle, real duration) {
     particle->addForce(gravity * particle->getMass());
 }
 
-/** ParticleDrag */
-
+/** ParticleDrag ******************************************************************************************************/
 ParticleDrag::ParticleDrag(real k1, real k2) : k1(k1), k2(k2) {}
 
 void ParticleDrag::updateForce(Particle *particle, real duration) {
@@ -61,8 +65,55 @@ void ParticleDrag::updateForce(Particle *particle, real duration) {
     particle->addForce(force);
 }
 
-/** ParticleUplift */
+/*******************************************************************************************************************//**
+ *  SPRING FORCE GENERATORS
+***********************************************************************************************************************/
 
+/** ParticleSpring ****************************************************************************************************/
+ParticleSpring::ParticleSpring(Particle *other, real springConstant, real restLength) : other(other),
+                                                                                        springConstant(springConstant),
+                                                                                        restLength(restLength)
+{}
+
+/* ParticleSpring::ParticleSpring(const ParticleSpring &otherSpring) {
+ *
+ * }
+ *
+ * ParticleSpring & ParticleSpring::operator=(const ParticleSpring &otherSpring) {
+ *     if (this == &otherSpring)
+ *         return *this;
+ *
+ *     delete other;
+ *     other = new Particle();
+ *     other = otherSpring.other;
+ *     springConstant = otherSpring.springConstant;
+ *     restLength = otherSpring.restLength;
+ *     return *this;
+ * }
+ */
+
+void ParticleSpring::updateForce(Particle *particle, real duration) {
+    // Calculate the vector of the spring
+    Vector2D force;
+    particle->getPosition(&force);
+    force -= other->getPosition();
+
+    // Calculate the magnitude of the force
+    real magnitude = force.magnitude();
+    magnitude = real_abs(magnitude - restLength);
+    magnitude *= springConstant;
+
+    // Calculate the final force and apply it
+    force.normalize();
+    force *= -magnitude;
+    particle->addForce(force);
+}
+
+/*******************************************************************************************************************//**
+ *  EXPERIMENTAL FORCE GENERATORS (From Chapter End Exercises)
+***********************************************************************************************************************/
+
+/** ParticleUplift ****************************************************************************************************/
 ParticleUplift::ParticleUplift(const Vector2D &uplift, const Vector2D &origin, real range) : uplift(uplift),
                                                                                              origin(origin),
                                                                                              range(range)
@@ -77,8 +128,7 @@ void ParticleUplift::updateForce(Particle *particle, real duration) {
     particle->addForce(uplift * particle->getMass());
 }
 
-/** ParticleAirbrake */
-
+/** ParticleAirbrake **************************************************************************************************/
 ParticleAirbrake::ParticleAirbrake(real k1, real k2, bool isActive) : ParticleDrag(k1, k2), isActive(isActive) {}
 
 void ParticleAirbrake::updateForce(Particle *particle, real duration) {
@@ -92,8 +142,7 @@ void ParticleAirbrake::setActive(bool newActiveState) { isActive = newActiveStat
 
 void ParticleAirbrake::toggleActive() { isActive = !isActive; }
 
-/** ParticleAttraction */
-
+/** ParticleAttraction ************************************************************************************************/
 ParticleAttraction::ParticleAttraction(real magnitude, const Vector2D &origin) : magnitude(magnitude), origin(origin) {}
 
 void ParticleAttraction::updateForce(Particle *particle, real duration) {

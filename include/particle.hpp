@@ -22,6 +22,9 @@ protected:
     Vector2D acceleration;
     Vector2D forceAccum;
 public:
+    /** Creates a new Particle with default parameters. */
+    Particle();
+
     /**
      *	Integrates the particle forward in time by the given amount.
      *	This function uses a Newton-Euler integration method, which is a linear approximation

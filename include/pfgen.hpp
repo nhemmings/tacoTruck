@@ -84,7 +84,32 @@ public:
     virtual void updateForce(Particle *particle, real duration);
 };
 
-/** EXPERIMENTAL */
+/*******************************************************************************************************************//**
+ *  SPRING FORCE GENERATORS
+***********************************************************************************************************************/
+
+/** A force generator that applies a spring force */
+class ParticleSpring : public ParticleForceGenerator {
+    Particle *other;        /**< The particle at the other end of the spring. */
+    real springConstant;    /**< Holds the spring constant. */
+    real restLength;        /**< Holds the rest length of the spring. */
+
+public:
+    /** Creates a new spring with the given parameters. */
+    ParticleSpring(Particle *other, real springConstant, real restLength);
+
+/*     /** Clones the given ParticleSpring to a new ParticleSpring. *//*
+ *     ParticleSpring(const ParticleSpring &other);
+ *     ParticleSpring & operator=(const ParticleSpring &other);
+ */
+
+    /** Applies the spring force to the given particle. */
+    virtual void updateForce(Particle *particle, real duration);
+};
+
+/*******************************************************************************************************************//**
+ *  EXPERIMENTAL FORCE GENERATORS (From Chapter End Exercises)
+***********************************************************************************************************************/
 
 /** A force generator that applies an uplift force. One instance can be used for multiple particles. */
 class ParticleUplift : public ParticleForceGenerator {

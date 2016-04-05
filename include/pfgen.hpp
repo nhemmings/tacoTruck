@@ -107,6 +107,26 @@ public:
     virtual void updateForce(Particle *particle, real duration);
 };
 
+/** A force generator that applies a spring force, where one end is attached to a fixed point in space. */
+class ParticleAnchoredSpring : public ParticleForceGenerator {
+protected:
+    /** The location of the anchored end of the spring. */
+    Vector2D *anchor;
+
+    /** Holds the spring constant. */
+    real springConstant;
+
+    /** Holds the rest length of the spring. */
+    real restLength;
+
+public:
+    /** Creates a new spring with the given parameters. */
+    ParticleAnchoredSpring(Vector2D *anchor, real springConstant, real restLength);
+
+    /** Applies the spring force to the given particle. */
+    virtual void updateForce(Particle *particle, real duration);
+};
+
 /*******************************************************************************************************************//**
  *  EXPERIMENTAL FORCE GENERATORS (From Chapter End Exercises)
 ***********************************************************************************************************************/

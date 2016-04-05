@@ -109,6 +109,29 @@ void ParticleSpring::updateForce(Particle *particle, real duration) {
     particle->addForce(force);
 }
 
+/** ParticleAnchoredSpring ********************************************************************************************/
+ParticleAnchoredSpring::ParticleAnchoredSpring(Vector2D *anchor, real springConstant, real restLength) :
+                                                                                anchor(anchor),
+                                                                                springConstant(springConstant),
+                                                                                restLength(restLength)
+{}
+
+void ParticleAnchoredSpring::updateForce(Particle *particle, real duration) {
+    // Calculate the vector of the spring
+    Vector2D force;
+    particle->getPosition(&force);
+    force -= *anchor;
+
+    // Calculate the magnitude of the force
+    real magnitude = force.magnitude();
+    magnitude = (restLength - magnitude) * springConstant;
+
+    // Calculate the final force and apply it
+    force.normalize();
+    force *= magnitude;
+    particle->addForce();
+}
+
 /*******************************************************************************************************************//**
  *  EXPERIMENTAL FORCE GENERATORS (From Chapter End Exercises)
 ***********************************************************************************************************************/

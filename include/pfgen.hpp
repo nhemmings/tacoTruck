@@ -60,8 +60,7 @@ public:
 
 /** A force generator that applies a gravitational force. One instance can be used for multiple particles. */
 class ParticleGravity : public ParticleForceGenerator {
-    /** Holds the acceleration due to gravity. */
-    Vector2D gravity;
+    Vector2D gravity;   /**< Holds the acceleration due to gravity. */
 
 public:
     /** Creates the generator with the given acceleration. */
@@ -110,18 +109,27 @@ public:
 /** A force generator that applies a spring force, where one end is attached to a fixed point in space. */
 class ParticleAnchoredSpring : public ParticleForceGenerator {
 protected:
-    /** The location of the anchored end of the spring. */
-    Vector2D *anchor;
-
-    /** Holds the spring constant. */
-    real springConstant;
-
-    /** Holds the rest length of the spring. */
-    real restLength;
+    Vector2D *anchor;       /**< The location of the anchored end of the spring. */
+    real springConstant;    /**< Holds the spring constant. */
+    real restLength;        /**< Holds the rest length of the spring. */
 
 public:
     /** Creates a new spring with the given parameters. */
     ParticleAnchoredSpring(Vector2D *anchor, real springConstant, real restLength);
+
+    /** Applies the spring force to the given particle. */
+    virtual void updateForce(Particle *particle, real duration);
+};
+
+/** A force generator that applies a spring force only when extended. */
+class ParticleBungee : public ParticleForceGenerator {
+    Particle *other;        /**< The particle at the other end of the spring. */
+    real springConstant;    /**< Holds the spring constant. */
+    real restLength;        /**< Holds the length of the bungee at the point it begins to generate a force. */
+
+public:
+    /** Creates a new bungee with the given parameters. */
+    ParticleBungee(Particle *other, real springConstant, real restLength);
 
     /** Applies the spring force to the given particle. */
     virtual void updateForce(Particle *particle, real duration);
@@ -155,12 +163,8 @@ public:
 
     /** Applies the airbraking force to the given particle */
     virtual void updateForce(Particle *particle, real duration);
-
-    /** Activates or deactivates the force generator. */
-    void setActive(bool isActive);
-
-    /** Activates or deactivates the force generator. */
-    void toggleActive();
+    void setActive(bool isActive);      /**< Activates or deactivates the force generator. */
+    void toggleActive();                /**< Activates or deactivates the force generator. */
 };
 
 /** A force generator that applies a constant attraction force towards a fixed point.

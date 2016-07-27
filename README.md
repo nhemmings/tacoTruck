@@ -1,2 +1,2 @@
 ##Cyclone physics engine
-Rewriting Ian Millington's "Cyclone" physics engine piece by piece as I work my way through his book "Game Physics Engine Development - Second Edition".
+I am recreating Ian Millington's "Cyclone" physics engine piece by piece as I work my way through his book "Game Physics Engine Development - Second Edition". This is not my original work. I might make a few changes along the way, but the main purpose is to help me learn the code by writing the code. The website for the book and original source code can be found [here](http://procyclone.com/).
